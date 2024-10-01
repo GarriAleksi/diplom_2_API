@@ -1,4 +1,5 @@
 import io.qameta.allure.junit4.DisplayName;
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
@@ -29,6 +30,7 @@ public class CreateOrderWithLoginTest extends BaseTest {
 
     @Test
     @DisplayName("Создание заказа с авторизацией")
+    @Step("Создание заказа с авторизацией")
     public void createCorrectOrderWithLogin() {
         Map<String, String[]> ingredientsMap = ingredientsGenerator.getCorrectIngredients();
         Response response = orderClient.createOrderWithLogin(ingredientsMap, accessToken);
@@ -43,6 +45,7 @@ public class CreateOrderWithLoginTest extends BaseTest {
 
     @Test
     @DisplayName("Создание заказа с авторизацией, без ингредиентов")
+    @Step("Создание заказа с авторизацией без ингредиентов")
     public void createOrderWithoutIngredients() {
         Map<String, String[]> ingredientsMap = ingredientsGenerator.getEmptyIngredients();
         log.info("Список ингредиентов: {}", ingredientsMap);
@@ -56,9 +59,9 @@ public class CreateOrderWithLoginTest extends BaseTest {
                 .and().body(MESSAGE, equalTo(TEXT_MESSAGE_INGREDIENT_IDS_MUST_BE_PROVIDED));
     }
 
-
     @Test
     @DisplayName("Создание заказа с авторизацией, с некорректным хэшем ингредиентов")
+    @Step("Создание заказа с авторизацией с некорректными ингредиентами")
     public void createOrderWithIncorrectIngredients() {
         Map<String, String[]> ingredientsMap = ingredientsGenerator.getIncorrectIngredients();
         log.info("Список ингредиентов: {}", ingredientsMap);

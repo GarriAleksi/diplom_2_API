@@ -1,3 +1,4 @@
+import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,8 @@ public class CreateUserWithValidDataTest extends BaseTest {
     private final UserGenerator userGenerator = new UserGenerator();
 
     @Test
-    @DisplayName("Регистрация валидного пользователя")
+    @DisplayName("Регистрация нового уникального пользователя")
+    @Description("Этот тест проверяет успешную регистрацию нового уникального пользователя. Мы создаем пользователя с уникальными данными и отправляем запрос на регистрацию. Ожидается успешный ответ и наличие токена доступа.")
     public void registerUniqueUser() {
         // Генерация нового уникального пользователя
         user = userGenerator.createUser();
@@ -42,7 +44,8 @@ public class CreateUserWithValidDataTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Повторная регистрация уже существующего пользователя")
+    @DisplayName("Регистрация пользователя с уже существующей почтой")
+    @Description("Этот тест проверяет попытку повторной регистрации пользователя с уже существующим email. Ожидается, что сервер вернет ошибку с соответствующим сообщением.")
     public void registerUserWithExistingEmail() {
         // Генерация пользователя и его регистрация
         user = userGenerator.createUser();

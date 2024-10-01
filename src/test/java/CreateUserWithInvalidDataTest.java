@@ -5,8 +5,8 @@ import org.junit.Test;
 import ru.yandex.practicum.client.user.UserClient;
 import ru.yandex.practicum.generator.UserGenerator;
 import ru.yandex.practicum.model.user.*;
-import io.qameta.allure.Description; // Импортируем аннотацию для описания
-import io.qameta.allure.Step; // Импортируем аннотацию для шагов
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 @Slf4j
@@ -21,6 +21,7 @@ public class CreateUserWithInvalidDataTest {
     /**
      * Метод для проверки неудачной регистрации пользователя.
      */
+    @Step("Проверка неудачной регистрации: статус {0}, сообщение {1}")
     private void checkInvalidUserResponse(ValidatableResponse response) {
         response.statusCode(HttpStatus.SC_FORBIDDEN)
                 .body(SUCCESS, equalTo(false))

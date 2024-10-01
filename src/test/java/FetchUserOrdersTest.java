@@ -1,3 +1,5 @@
+import io.qameta.allure.Description;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
@@ -20,6 +22,8 @@ public class FetchUserOrdersTest extends BaseTest {
     private static final String AUTH_ERROR_MESSAGE = "You should be authorised";
 
     @Test
+    @DisplayName("Получение заказов с авторизацией")
+    @Description("Этот тест проверяет возможность получения списка заказов авторизованного пользователя. Сначала создается заказ, а затем проверяется, что можно получить список всех заказов пользователя.")
     public void getOrdersWithAuth() {
         // Создание заказа перед проверкой получения списка заказов
         orderClient.createOrderWithLogin(ingredientsGenerator.getCorrectIngredients(), accessToken);
@@ -42,6 +46,8 @@ public class FetchUserOrdersTest extends BaseTest {
     }
 
     @Test
+    @DisplayName("Получение заказов без авторизации")
+    @Description("Этот тест проверяет, что запрос заказов без авторизации возвращает ошибку и соответствующее сообщение об ошибке.")
     public void getOrdersWithoutAuth() {
         // Получение заказов без авторизации
         Response response = orderClient.getOrdersWithoutAuth();

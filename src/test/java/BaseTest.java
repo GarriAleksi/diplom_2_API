@@ -1,3 +1,4 @@
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
@@ -16,6 +17,7 @@ public class BaseTest {
     protected Response responseCreateUser;
 
     @Before
+    @Step("Создание нового пользователя")
     public void createUser() {
         try {
             user = userGenerator.createUser(); // Генерация пользователя
@@ -32,6 +34,7 @@ public class BaseTest {
     }
 
     @After
+    @Step("Удаление пользователя")
     public void deleteUser() {
         if (user != null && accessToken != null) { // Проверка существования пользователя и токена
             try {
