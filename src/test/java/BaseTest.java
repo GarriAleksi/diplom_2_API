@@ -2,6 +2,9 @@ import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
 import ru.yandex.practicum.client.user.UserClient;
 import ru.yandex.practicum.generator.UserGenerator;
 import ru.yandex.practicum.model.user.User;
@@ -16,6 +19,8 @@ public class BaseTest {
     protected Response responseCreateUser;
 
     @Before
+    @Step("Генерация нового пользователя перед тестом")
+    @Description("Создание нового пользователя для теста и получение токена доступа.")
     public void createUser() {
         user = userGenerator.createUser(); // Генерация нового пользователя
         responseCreateUser = userClient.registerUser(user); // Регистрация пользователя
@@ -23,6 +28,8 @@ public class BaseTest {
     }
 
     @After
+    @Step("Удаление пользователя после теста")
+    @Description("Удаление созданного пользователя и проверка успешности операции.")
     public void deleteUser() {
         if (user != null) {
             try {
@@ -38,5 +45,12 @@ public class BaseTest {
         } else {
             log.warn("Пользователь для удаления равен null.");
         }
+    }
+
+    @Test
+    @Step("Тестирование создания и удаления пользователя")
+    @Description("Проверка, что пользователь успешно создается и удаляется.")
+    public void userCreationAndDeletionTest() {
+        // Здесь вы можете добавить код теста, который использует созданного пользователя
     }
 }
