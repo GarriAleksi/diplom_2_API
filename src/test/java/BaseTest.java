@@ -1,4 +1,3 @@
-import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
@@ -17,38 +16,27 @@ public class BaseTest {
     protected Response responseCreateUser;
 
     @Before
-    @Step("Создание нового пользователя")
     public void createUser() {
-        try {
-            user = userGenerator.createUser(); // Генерация пользователя
-            responseCreateUser = userClient.registerUser(user); // Регистрация пользователя
-            if (responseCreateUser.statusCode() == 200) { // Проверка успешности регистрации
-                accessToken = responseCreateUser.body().path(ACCESS_TOKEN); // Извлечение токена
-                log.info("Пользователь успешно создан. Токен: {}", accessToken);
-            } else {
-                log.error("Не удалось создать пользователя. Код статуса: {}", responseCreateUser.statusCode());
-            }
-        } catch (Exception e) {
-            log.error("Произошла ошибка при создании пользователя: {}", e.getMessage());
-        }
+        user = userGenerator.createUser(); // Генерация нового пользователя
+        responseCreateUser = userClient.registerUser(user); // Регистрация пользователя
+        accessToken = responseCreateUser.body().path(ACCESS_TOKEN); // Извлечение токена
     }
 
     @After
-    @Step("Удаление пользователя")
     public void deleteUser() {
-        if (user != null && accessToken != null) { // Проверка существования пользователя и токена
+        if (user != null) {
             try {
                 Response response = userClient.deleteUser(user, accessToken); // Удаление пользователя
-                if (response.statusCode() == 200) {
-                    log.info("Пользователь успешно удален.");
-                } else {
-                    log.error("Не удалось удалить пользователя. Код статуса: {}", response.statusCode());
+                if (response.statusCode() != 202) { // Проверка статуса ответа
+                    throw new RuntimeException("Не удалось удалить пользователя. Код статуса: " + response.statusCode());
                 }
+                log.info("Пользователь успешно удален.");
             } catch (Exception e) {
                 log.error("Произошла ошибка при удалении пользователя: {}", e.getMessage());
+                throw new RuntimeException("Ошибка при удалении пользователя", e); // Бросаем исключение, чтобы тест упал
             }
         } else {
-            log.warn("Пользователь или токен равны null, удаление пропущено.");
+            log.warn("Пользователь для удаления равен null.");
         }
     }
 }
